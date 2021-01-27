@@ -1,0 +1,32 @@
+{% extends "general.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block main_content %}
+
+<div class="container">
+    <div class="row">
+      <div class="col">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%for value in information %}
+              <tr>
+                <th scope="row">{{ value.id }}</th>
+                <td>{{ value.name }}</td>
+                <td>{{ value.password }}</td>
+              </tr>
+              {% endfor%}
+            </tbody>
+          </table>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
