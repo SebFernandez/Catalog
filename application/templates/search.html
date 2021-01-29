@@ -1,0 +1,42 @@
+{% extends "general.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block main_content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="/search" method="POST">
+                <div class="form-group">
+                  <label>Name</label>
+                  <input class="form-control" type="text" name="name">
+                </div>
+            
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+    
+    {% if table == True %}
+        <table class="table" style="margin-top: 5vh;">
+            <thead>
+            <tr>
+                <th scope="col">Movie</th>
+                <th scope="col">Year</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in list %}
+                <tr>
+                    <td>{{ i.get ('Title') }}</td>
+                    <td>{{ i.get ('Year') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    {% endif %}
+</div>
+{% endblock %}
