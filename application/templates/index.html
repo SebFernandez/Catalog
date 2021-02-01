@@ -1,32 +1,65 @@
 {% extends "general.html" %}
-
 {% block title %}Home{% endblock %}
-
 {% block main_content %}
 
 <div class="container">
-    <div class="row">
-      <div class="col">
-        <table class="table">
-            <thead>
+  <div class="row">
+    <div class="col">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Password</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if edit == False %}
+            {% for value in information %}
+              <form type="{{ url_for('main.index') }}" method="POST">
+                <tr>
+                  <th scope="row">{{ value.id }}</th>
+                  <input type="hidden" name="id" value="{{ value.id }}" />
+                  <td>{{ value.name }}</td>
+                  <input type="hidden" name="name" value="{{ value.name }}" />
+                  <td>{{ value.password }}</td>
+                  <input type="hidden" name="password" value="{{ value.password }}" />
+                  <td>
+                    <button name="delete" value="delete" type="button submit" class="btn">
+                      <i class="fas fa-minus text-danger"></i>
+                    </button>
+                    <button name="edit" value="edit" type="button submit" class="btn">
+                      <i class="fas fa-pen text-secondary"></i>
+                    </button>
+                  </td>
+                </tr>
+              </form>
+            {% endfor%}
+          {% elif edit == True %}
+            <form type="{{ url_for('main.edit', movie_name = name) }}" method="POST">
               <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Username</th>
-                <th scope="col">Password</th>
+                <th scope="row">
+                  <input class="form-control col-sm" type="text" placeholder="{{ id }}" disabled/>
+                </th>
+                <td>
+                  <input type="text" class="form-control" placeholder="{{ name }}" disabled />
+                </td>
+                <td>
+                  <input type="text" name="year" class="form-control" />
+                </td>
+                <td>
+                  <button type="button submit" name="confirm" class="btn">
+                    <i class="fas fa-check"></i>
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {% for value in information %}
-              <tr>
-                <th scope="row">{{ value.id }}</th>
-                <td>{{ value.name }}</td>
-                <td>{{ value.password }}</td>
-              </tr>
-              {% endfor%}
-            </tbody>
-          </table>
-      </div>
+            </form>
+          {% endif %}
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
 
 {% endblock %}
