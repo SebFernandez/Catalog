@@ -1,86 +1,76 @@
 {% extends "general.html" %}
-{% block title %}Home{% endblock %}
 
-{% block nav %}
-<nav class="nav">
-  <a class="nav-link text-white active" aria-current="page" href="/">Home</a>
-  {% if session == True %}
-    <a class="nav-link text-white" href="/search">Search</a>
-    <a class="nav-link text-white ml-auto" href="/logout">Log out</a>
-  {% elif session == False %}
-    <a class="nav-link text-white" tabindex="-1" aria-disabled><del>Search</del></a>
-    <a class="nav-link text-white ml-auto" href="/login">Log in</a>
-  {% endif %}
-</nav>
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block main_content %}
 
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <table class="table table-sm">
-        <thead>
+<div class="container flex-grow-1">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Year</th>
+        <th scope="col">Genre</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Your rating</th>
+        <th scope="col">Type</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if edit == False %}
+        {% for value in information %}
+          <form type="{{ url_for('main.index') }}" method="POST">
+            <tr>
+              <td>{{ value.name }}</td>
+              <input type="hidden" name="name" value="{{ value.name }}" />
+              <td>{{ value.year }}</td>
+              <td>{{ value.genre }}</td>
+              <td>{{ value.rating }}/10</td>
+              <td>{{ value.user_rating }}/10</td>
+              <td>{{ value.content_type }}</td>
+              <td>
+                <button name="delete" value="delete" type="button submit" class="btn">
+                  <i class="fas fa-minus text-danger"></i>
+                </button>
+                <button name="edit" value="edit" type="button submit" class="btn">
+                  <i class="fas fa-pen text-secondary"></i>
+                </button>
+              </td>
+            </tr>
+          </form>
+        {% endfor%}
+      {% elif edit == True %}
+        <form type="{{ url_for('main.edit', content_name = name) }}" method="POST">
           <tr>
-            {% if edit == False %}
-              <th scope="col">Name</th>
-              <th scope="col">Year</th>
-              <th scope="col">Genre</th>
-              <th scope="col">Rating</th>
-              <th scope="col">Your rating</th>
-              <th scope="col">Type</th>
-              <th scope="col"></th>
-            {% elif edit == True %}
-              <th scope="col">Name</th>
-              <th scope="col">Your rating</th>
-              <th scope="col"></th>        
-            {% endif %}
+            <td>
+              <input type="text" class="form-control name" placeholder="{{ content.name }}" disabled />
+            </td>
+            <td>
+              <input type="text" class="form-control year" placeholder="{{ content.year }}" disabled />
+            </td>
+            <td>
+              <input type="text" class="form-control genre" placeholder="{{ content.genre }}" disabled />
+            </td>
+            <td>
+              <input type="text" class="form-control rating" placeholder="{{ content.rating }}/10" disabled />
+            </td>
+            <td>
+              <input type="number" name="your-rating" class="form-control your-rating" min="1" max="10">
+            </td>
+            <td>
+              <input type="text" class="form-control type" placeholder="{{ content.content_type }}" disabled />
+            </td>            
+            <td>
+              <button type="button submit" name="confirm" class="btn">
+                <i class="fas fa-check"></i>
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {% if edit == False %}
-            {% for value in information %}
-              <form type="{{ url_for('main.index') }}" method="POST">
-                <tr>
-                  <td>{{ value.name }}</td>
-                  <input type="hidden" name="name" value="{{ value.name }}" />
-                  <td>{{ value.year }}</td>
-                  <td>{{ value.genre }}</td>
-                  <td>{{ value.rating }}/10</td>
-                  <td>{{ value.user_rating }}/10</td>
-                  <td>{{ value.content_type }}</td>
-                  <td>
-                    <button name="delete" value="delete" type="button submit" class="btn">
-                      <i class="fas fa-minus text-danger"></i>
-                    </button>
-                    <button name="edit" value="edit" type="button submit" class="btn">
-                      <i class="fas fa-pen text-secondary"></i>
-                    </button>
-                  </td>
-                </tr>
-              </form>
-            {% endfor%}
-          {% elif edit == True %}
-            <form type="{{ url_for('main.edit', content_name = name) }}" method="POST">
-              <tr>
-                <td>
-                  <input type="text" class="form-control name" placeholder="{{ name }}" disabled />
-                </td>
-                <td>
-                  <input type="number" name="your-rating" class="form-control your-rating" min="1" max="10">
-                </td>
-                <td>
-                  <button type="button submit" name="confirm" class="btn">
-                    <i class="fas fa-check"></i>
-                  </button>
-                </td>
-              </tr>
-            </form>
-          {% endif %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+        </form>
+      {% endif %}
+    </tbody>
+  </table>
 </div>
 
 {% endblock %}

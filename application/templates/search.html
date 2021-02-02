@@ -2,56 +2,42 @@
 
 {% block title %}Search{% endblock %}
 
-{% block nav %}
-<nav class="nav">
-    <a class="nav-link text-white active" aria-current="page" href="/">Home</a>
-    <a class="nav-link text-white" href="/search">Search</a>
-    {% if session == True %}
-        <a class="nav-link text-white ml-auto" href="/logout">Log out</a>
-  {% endif %}
-  </nav>
-{% endblock %}
-
 {% block main_content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <form action="/search" method="POST">
-                <div class="form-group">
-                  <label>Content name</label>
-                  <input class="form-control" type="text" name="name">
-                </div>
-            
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
-        </div>
-    </div>
+<div class="container flex-grow-1">
     
+    <form action="/search" method="POST">
+        <label>Content name</label>
+        <div class="input-group mb-3">
+          <input class="form-control" type="text" name="name" placeholder="Star Wars">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        </div>
+    </form>
+
     {% if table == True %}
         <table class="table table-sm" style="margin-top: 5vh;">
             <thead>
-            <tr>
-                <th scope="col">Movie</th>
-                <th scope="col">Year</th>
-                <th scope="col">Type</th>
-                <th scope="col"></th>
-            </tr>
+                <tr>
+                    <th scope="col">Movie</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Type</th>
+                    <th scope="col"></th>
+                </tr>
             </thead>
             <tbody>
-            {% for i in list %}
-                <form action="{{ url_for ('main.search_results', name =i.get ('Title')) }}" method="POST">
-                    <tr>
-                        <td>{{ i.get ('Title') }}</td>
-                        <input type="hidden" name="title" value="{{ i.get ('Title') }}"/>
-                        <td>{{ i.get ('Year') }}</td>
-                        <input type="hidden" name="year" value="{{ i.get ('Year') }}"/>
-                        <td>{{ i.get ('Type') }}</td>
-                        <input type="hidden" name="year" value="{{ i.get ('Type') }}"/>
-                        <td><button type='button submit' class='btn'><i class="fas fa-plus text-success"></i></button></td>
-                    </tr>
-                </form>
-            {% endfor %}
+                {% for i in list %}
+                    <form action="{{ url_for ('main.search_results', name =i.get ('Title')) }}" method="POST">
+                        <tr>
+                            <td>{{ i.get ('Title') }}</td>
+                            <input type="hidden" name="title" value="{{ i.get ('Title') }}" />
+                            <td>{{ i.get ('Year') }}</td>
+                            <input type="hidden" name="year" value="{{ i.get ('Year') }}" />
+                            <td>{{ i.get ('Type') }}</td>
+                            <input type="hidden" name="year" value="{{ i.get ('Type') }}" />
+                            <td><button type='button submit' class='btn'><i class="fas fa-plus text-success"></i></button></td>
+                        </tr>
+                    </form>
+                {% endfor %}
             </tbody>
         </table>
 

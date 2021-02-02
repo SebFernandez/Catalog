@@ -1,20 +1,20 @@
 html, body    {
-    height: 100%;
     background-color: #0F110C;
     color: aliceblue;
+    height: 100%;
 }
 
-.nav    {
+.nav.header    {
     border-bottom: 1px solid #B95F89;
+    width: 100%;
 }
 
 .nav.footer {
     margin-top: 15%;
     border-top: 1px solid #D74E09;
-    border-bottom: none;
+    width: 100%;
     position: absolute;
     bottom: 0;
-    width: 100%;
 }
 
 .table.table-sm > thead > tr > th{
@@ -30,6 +30,10 @@ html, body    {
     margin-top: 15vh;
 }
 
+.btn.btn-primary    {
+    margin-left: 1vh;
+}
+
 .form-control:focus   {
     border-width: 3px;
     border-color: #B6C649;
@@ -39,8 +43,24 @@ html, body    {
     width: 30vh;
 }
 
+.form-control.year  {
+    width: 10vh;
+}
+
+.form-control.genre  {
+    width: 30vh;
+}
+
+.form-control.rating  {
+    width: 7vh;
+}
+
 .form-control.your-rating  {
     width: 10vh;
+}
+
+.form-control.type  {
+    width: 8vh;
 }
 
 .fab.fa-github   {

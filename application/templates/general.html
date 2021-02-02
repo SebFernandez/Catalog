@@ -10,18 +10,29 @@
         <title>{% block title %}{% endblock %} | Catalog </title>
     </head>
 
-    <header>
-        {% block nav %}{% endblock %}
-    </header>
+    <body class="d-flex flex-column">
+        <header class="d-inline-flex align-items-start">
+            <nav class="nav header">
+                <a class="nav-link text-white active" aria-current="page" href="/">Home</a>
+                {% if session == True %}
+                    <a class="nav-link text-white active" aria-current="page" href="/search">Search</a>
+                    <a class="nav-link text-white ml-auto" href="/logout">Log out</a>
+                {% elif session == False %}
+                    <a class="nav-link text-white" tabindex="-1" aria-disabled><del>Search</del></a>
+                    <a class="nav-link text-white ml-auto" href="/login">Log in</a>
+                {% endif %}
+            </nav>
+        </header>
 
-    <body>
-        {% block main_content %}{% endblock %}
+        <main class="d-inline-flex">
+            {% block main_content %}{% endblock %}
+        </main>
+
+        <footer>
+            <nav class="nav footer">
+                <a class="nav-link text-white" href="https://github.com/SebFernandez"><> by Sebastián Fernandez</a>
+                <a class="nav-link  ml-auto github-icon" href="https://github.com/SebFernandez/Catalog"><i class="fab fa-github"></i></a>
+            </nav>
+        </footer>
     </body>
-
-    <footer>
-        <nav class="nav footer">
-            <a class="nav-link text-white" href="https://github.com/SebFernandez"><> by Sebastián Fernandez</a>
-            <a class="nav-link  ml-auto github-icon" href="https://github.com/SebFernandez/Catalog"><i class="fab fa-github"></i></a>
-          </nav>
-    </footer>
 </html>
