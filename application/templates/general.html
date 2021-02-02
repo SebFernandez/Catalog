@@ -11,6 +11,7 @@
     </head>
 
     <header>
+        {% block nav %}{% endblock %}
     </header>
 
     <body>
@@ -18,5 +19,9 @@
     </body>
 
     <footer>
+        <nav class="nav footer">
+            <a class="nav-link text-white" href="https://github.com/SebFernandez"><> by Sebastián Fernandez</a>
+            <a class="nav-link  ml-auto github-icon" href="https://github.com/SebFernandez/Catalog"><i class="fab fa-github"></i></a>
+          </nav>
     </footer>
 </html>

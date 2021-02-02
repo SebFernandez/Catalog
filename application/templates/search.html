@@ -2,6 +2,16 @@
 
 {% block title %}Search{% endblock %}
 
+{% block nav %}
+<nav class="nav">
+    <a class="nav-link text-white active" aria-current="page" href="/">Home</a>
+    <a class="nav-link text-white" href="/search">Search</a>
+    {% if session == True %}
+        <a class="nav-link text-white ml-auto" href="/logout">Log out</a>
+  {% endif %}
+  </nav>
+{% endblock %}
+
 {% block main_content %}
 
 <div class="container">
@@ -9,7 +19,7 @@
         <div class="col">
             <form action="/search" method="POST">
                 <div class="form-group">
-                  <label>Name</label>
+                  <label>Content name</label>
                   <input class="form-control" type="text" name="name">
                 </div>
             
@@ -19,11 +29,12 @@
     </div>
     
     {% if table == True %}
-        <table class="table" style="margin-top: 5vh;">
+        <table class="table table-sm" style="margin-top: 5vh;">
             <thead>
             <tr>
                 <th scope="col">Movie</th>
                 <th scope="col">Year</th>
+                <th scope="col">Type</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -35,6 +46,8 @@
                         <input type="hidden" name="title" value="{{ i.get ('Title') }}"/>
                         <td>{{ i.get ('Year') }}</td>
                         <input type="hidden" name="year" value="{{ i.get ('Year') }}"/>
+                        <td>{{ i.get ('Type') }}</td>
+                        <input type="hidden" name="year" value="{{ i.get ('Type') }}"/>
                         <td><button type='button submit' class='btn'><i class="fas fa-plus text-success"></i></button></td>
                     </tr>
                 </form>

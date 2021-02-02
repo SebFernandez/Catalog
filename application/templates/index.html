@@ -1,17 +1,40 @@
 {% extends "general.html" %}
 {% block title %}Home{% endblock %}
+
+{% block nav %}
+<nav class="nav">
+  <a class="nav-link text-white active" aria-current="page" href="/">Home</a>
+  {% if session == True %}
+    <a class="nav-link text-white" href="/search">Search</a>
+    <a class="nav-link text-white ml-auto" href="/logout">Log out</a>
+  {% elif session == False %}
+    <a class="nav-link text-white" tabindex="-1" aria-disabled><del>Search</del></a>
+    <a class="nav-link text-white ml-auto" href="/login">Log in</a>
+  {% endif %}
+</nav>
+{% endblock %}
+
 {% block main_content %}
 
 <div class="container">
   <div class="row">
     <div class="col">
-      <table class="table">
+      <table class="table table-sm">
         <thead>
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Username</th>
-            <th scope="col">Password</th>
-            <th scope="col"></th>
+            {% if edit == False %}
+              <th scope="col">Name</th>
+              <th scope="col">Year</th>
+              <th scope="col">Genre</th>
+              <th scope="col">Rating</th>
+              <th scope="col">Your rating</th>
+              <th scope="col">Type</th>
+              <th scope="col"></th>
+            {% elif edit == True %}
+              <th scope="col">Name</th>
+              <th scope="col">Your rating</th>
+              <th scope="col"></th>        
+            {% endif %}
           </tr>
         </thead>
         <tbody>
@@ -19,12 +42,13 @@
             {% for value in information %}
               <form type="{{ url_for('main.index') }}" method="POST">
                 <tr>
-                  <th scope="row">{{ value.id }}</th>
-                  <input type="hidden" name="id" value="{{ value.id }}" />
                   <td>{{ value.name }}</td>
                   <input type="hidden" name="name" value="{{ value.name }}" />
-                  <td>{{ value.password }}</td>
-                  <input type="hidden" name="password" value="{{ value.password }}" />
+                  <td>{{ value.year }}</td>
+                  <td>{{ value.genre }}</td>
+                  <td>{{ value.rating }}/10</td>
+                  <td>{{ value.user_rating }}/10</td>
+                  <td>{{ value.content_type }}</td>
                   <td>
                     <button name="delete" value="delete" type="button submit" class="btn">
                       <i class="fas fa-minus text-danger"></i>
@@ -37,16 +61,13 @@
               </form>
             {% endfor%}
           {% elif edit == True %}
-            <form type="{{ url_for('main.edit', movie_name = name) }}" method="POST">
+            <form type="{{ url_for('main.edit', content_name = name) }}" method="POST">
               <tr>
-                <th scope="row">
-                  <input class="form-control col-sm" type="text" placeholder="{{ id }}" disabled/>
-                </th>
                 <td>
-                  <input type="text" class="form-control" placeholder="{{ name }}" disabled />
+                  <input type="text" class="form-control name" placeholder="{{ name }}" disabled />
                 </td>
                 <td>
-                  <input type="text" name="year" class="form-control" />
+                  <input type="number" name="your-rating" class="form-control your-rating" min="1" max="10">
                 </td>
                 <td>
                   <button type="button submit" name="confirm" class="btn">

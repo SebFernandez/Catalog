@@ -1,3 +1,48 @@
-body    {
+html, body    {
+    height: 100%;
+    background-color: #0F110C;
+    color: aliceblue;
+}
+
+.nav    {
+    border-bottom: 1px solid #B95F89;
+}
+
+.nav.footer {
     margin-top: 15%;
+    border-top: 1px solid #D74E09;
+    border-bottom: none;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.table.table-sm > thead > tr > th{
+    border-top: none;
+    border-bottom: 2px solid #61A0AF;
+}
+
+.table.table-sm > tbody > tr > td{
+    border-top: 1px solid #61A0AF;   
+}
+
+.container    {
+    margin-top: 15vh;
+}
+
+.form-control:focus   {
+    border-width: 3px;
+    border-color: #B6C649;
+}
+
+.form-control.name  {
+    width: 30vh;
+}
+
+.form-control.your-rating  {
+    width: 10vh;
+}
+
+.fab.fa-github   {
+    color: aliceblue;
 }

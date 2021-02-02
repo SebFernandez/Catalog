@@ -1,31 +1,36 @@
 from flask import Blueprint, url_for, render_template, request, redirect, session
-from application.models import User
+from application.models import Content
 from application.extensions import db
 from operator import itemgetter
 import requests
 
 main = Blueprint('main', __name__)
 
+'''
+
+#TODO
+    - Mark many items to add them in group, also to delete them.
+    - Unit test
+    
+'''
 @main.route ('/', methods = ["GET", "POST"])
 def index ():
     if request.method == "GET":
         if 'loged' not in session:
-            User.query.delete()
+            Content.query.delete()
             db.session.commit ()
             
-            return render_template ("index.html")
+            return render_template ("index.html", session=False)
         else:
-            information = User.query.all()
+            information = Content.query.all()
             
-            return render_template ("index.html", edit = False, information=information)
+            return render_template ("index.html", session=True, edit = False, information=information)
     if request.method == "POST":
-        print ("hola")
-        
         if request.form.get ("delete") == 'delete':
             title = request.form.get ("name")
             
             #! Returns models object. movie.id -> ID, movie.name -> name, movie.password -> password.
-            movie = User.query.filter_by(name=title).first()
+            movie = Content.query.filter_by(name=title).first()
             
             if (movie):
                 db.session.delete(movie)
@@ -36,7 +41,7 @@ def index ():
         elif request.form.get ("edit") == 'edit':
             title = request.form.get ("name")
             
-            return redirect (url_for ('main.edit', movie_name = title))
+            return redirect (url_for ('main.edit', content_name = title))
 
 @main.route ('/search', methods = ["GET", "POST"])
 def search ():
@@ -49,13 +54,14 @@ def search ():
 
 @main.route ('/search/<name>',  methods = ["GET", "POST"])
 def search_results(name):
+    d = {}
+    
     if request.method == "GET":
         URL = 'https://www.omdbapi.com/?s=' + name + '&apikey=678cd26e'
         
         q = requests.get(url=URL)
         r = q.json()
             
-        d = {}
         dlist = []
             
         if q.status_code == 200:
@@ -63,7 +69,8 @@ def search_results(name):
                 for i in r['Search']:
                     d = {
                         'Title' : i.get ('Title'),
-                        'Year' : i.get ('Year')
+                        'Year' : i.get ('Year'),
+                        'Type': i.get ('Type').capitalize(),
                     }
                         
                     dlist.append (d)
@@ -77,31 +84,43 @@ def search_results(name):
     
     elif request.method == "POST":
         title = request.form.get ("title")
-        year = request.form.get ("year")
         
-        if not bool(User.query.filter_by(name=title).first()):
+        if not bool(Content.query.filter_by(name=title).first()):
+            
+            URL = 'https://www.omdbapi.com/?t=' + title + '&apikey=678cd26e'
+            
+            q = requests.get(url=URL)
+            r = q.json()
+            
+            if q.status_code == 200:
+                if r['Response'] == 'True':
+                    d = {
+                        'Title': r['Title'],
+                        'Year' : r['Year'],
+                        'Genre': r['Genre'],
+                        'Rating' : float (r['imdbRating']),
+                        'Type': r['Type'].capitalize()
+                    }
         
-            new_movie = User (name=title, password=year)
+            new_content = Content (name=d['Title'], year=d['Year'], genre=d['Genre'], rating = d['Rating'], content_type= d['Type'])
             
-            print (title, year)
-            
-            db.session.add (new_movie)
+            db.session.add (new_content)
             db.session.commit ()
         
         return redirect (url_for("main.index"))
 
-@main.route ('/edit/<movie_name>', methods = ["GET", "POST"])
-def edit (movie_name):
-    movie = User.query.filter_by(name=movie_name).first()
+@main.route ('/edit/<content_name>', methods = ["GET", "POST"])
+def edit (content_name):
+    content = Content.query.filter_by(name=content_name).first()
     
     if request.method == "GET":
-        return render_template ("index.html", edit = True, id = movie.id, name = movie.name)
+        return render_template ("index.html", edit = True, name = content.name,)
     
     elif request.method == "POST":
-    
-        movie.password = request.form.get ('year')
-    
-        db.session.commit ()
+        if request.form.get ('your-rating'):
+            content.user_rating = request.form.get ('your-rating')
+        
+            db.session.commit ()
     
         return redirect (url_for ('main.index'))
    
@@ -116,28 +135,3 @@ def logout ():
     session.pop ('loged', None)
     
     return redirect (url_for ('main.index'))
-
-'''
-@main.route ('/add', methods = ["GET", "POST"])
-def add ():
-    if request.method == "POST":
-            name = request.form.get ("username")
-            password = request.form.get ("password")
-            
-            print (name, password)
-            
-            new_user = User (name=name, password=password)
-            
-            #! Query to check if a row already exists.
-            if not bool(User.query.filter_by(name=new_user.name).first()):    
-                db.session.add (new_user)
-                db.session.commit ()
-                
-                return redirect (url_for("main.index"))
-            else:
-                User.query.delete()
-                db.session.commit ()
-                
-                return 'No'
-                
-'''
