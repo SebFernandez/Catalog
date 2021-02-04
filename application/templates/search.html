@@ -4,44 +4,40 @@
 
 {% block main_content %}
 
-<div class="container flex-grow-1">
+<div class="container-md flex-grow-1">
     
-    <form action="/search" method="POST">
+    <form action="{{ url_for ('main.search') }}" method="POST">
         <label>Content name</label>
         <div class="input-group mb-3">
-          <input class="form-control" type="text" name="name" placeholder="Star Wars">
+          <input class="form-control" type="text" name="name" placeholder="Star Wars" autofocus>
           <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
         </div>
     </form>
 
     {% if table == True %}
-        <table class="table table-sm" style="margin-top: 5vh;">
-            <thead>
-                <tr>
-                    <th scope="col">Movie</th>
-                    <th scope="col">Year</th>
-                    <th scope="col">Type</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in list %}
-                    <form action="{{ url_for ('main.search_results', name =i.get ('Title')) }}" method="POST">
-                        <tr>
-                            <td>{{ i.get ('Title') }}</td>
-                            <input type="hidden" name="title" value="{{ i.get ('Title') }}" />
-                            <td>{{ i.get ('Year') }}</td>
-                            <input type="hidden" name="year" value="{{ i.get ('Year') }}" />
-                            <td>{{ i.get ('Type') }}</td>
-                            <input type="hidden" name="year" value="{{ i.get ('Type') }}" />
-                            <td><button type='button submit' class='btn'><i class="fas fa-plus text-success"></i></button></td>
-                        </tr>
-                    </form>
-                {% endfor %}
-            </tbody>
-        </table>
-
-
+        <form action="{{ url_for ('main.search_results') }}" method="POST">
+            <div class="row head">
+                <div class="col-9">Movie</div>
+                <div class="col-1 d-inline-flex justify-content-center">Year</div>
+                <div class="col-1">Type</div>
+                <div class="col-1 d-inline-flex justify-content-center">
+                    <button type='button submit' class='btn icon'><i class="fas fa-plus text-success"></i></button>
+                </div>
+            </div>
+            {% for i in list %}
+                <div class="row body">
+                    <div class="col-9">{{ i.get ('Title') }}</div>
+                    <input type="hidden" name="title" value="{{ i.get ('Title') }}" />
+                    <div class="col-1">{{ i.get ('Year') }}</div>
+                    <input type="hidden" name="year" value="{{ i.get ('Year') }}" />
+                    <div class="col-1">{{ i.get ('Type') }}</div>
+                    <input type="hidden" name="year" value="{{ i.get ('Type') }}" />
+                    <div class="col-1 d-inline-flex justify-content-center">
+                    <input type="checkbox" name="active-item" value="{{ i.get ('Title') }}">
+                    </div>
+                </div>
+            {% endfor %}
+        </form>
     {% endif %}
 </div>
 {% endblock %}

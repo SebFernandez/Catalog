@@ -4,30 +4,39 @@ html, body    {
     height: 100%;
 }
 
+main    {
+    margin-left: 20vh;
+    margin-right: 20vh;
+}
+
+.nav.fixed-bottom.footer {
+    margin-top: 15%;
+    border-top: 1px solid #D74E09;
+}
+
 .nav.header    {
     border-bottom: 1px solid #B95F89;
     width: 100%;
 }
 
-.nav.footer {
-    margin-top: 15%;
-    border-top: 1px solid #D74E09;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-}
-
-.table.table-sm > thead > tr > th{
-    border-top: none;
+.row.head{
     border-bottom: 2px solid #61A0AF;
+    margin-left: 0;
+    margin-right: 0;
 }
 
-.table.table-sm > tbody > tr > td{
-    border-top: 1px solid #61A0AF;   
+.row.body   {
+    border-top: 1px solid #61A0AF;
+    margin-left: 0;
+    margin-right: 0;
 }
 
-.container    {
-    margin-top: 15vh;
+#chck   {
+    text-align: center;
+}
+
+.container-md.flex-grow-1   {
+    margin-top: 10vh;
 }
 
 .btn.btn-primary    {

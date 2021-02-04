@@ -1,7 +1,7 @@
 from flask import Blueprint, url_for, render_template, request, redirect, session
 from application.models import Content
 from application.extensions import db
-from operator import itemgetter
+from operator import add, itemgetter
 import requests
 
 main = Blueprint('main', __name__)
@@ -13,12 +13,36 @@ main = Blueprint('main', __name__)
     - Unit test.
     
 '''
+
+add_list = []
+srch_list = []
+delete_list = []
+user_search = ""
+dlist = []
+
+def delete_items ():
+    if delete_list:
+        for i in delete_list:
+            
+            #! Returns models object. movie.id -> ID, movie.name -> name, movie.password -> password.
+            content = Content.query.filter_by(name=i).first()
+            
+            if (content):
+                db.session.delete (content)
+                db.session.commit ()
+        
+        delete_list.clear()
+    
+def delete_full_db ():
+    Content.query.delete()
+    db.session.commit ()
+
 @main.route ('/', methods = ["GET", "POST"])
 def index ():
     if request.method == "GET":
         if 'loged' not in session:
-            Content.query.delete()
-            db.session.commit ()
+            
+            delete_full_db ()
             
             return render_template ("index.html", session=False)
         else:
@@ -27,14 +51,13 @@ def index ():
             return render_template ("index.html", session=True, edit = False, information=information)
     if request.method == "POST":
         if request.form.get ("delete") == 'delete':
-            title = request.form.get ("name")
             
-            #! Returns models object. movie.id -> ID, movie.name -> name, movie.password -> password.
-            movie = Content.query.filter_by(name=title).first()
+            titles = request.form.getlist ("active-item")
             
-            if (movie):
-                db.session.delete(movie)
-                db.session.commit ()
+            for i in titles:
+                delete_list.append(i)
+                
+            delete_items ()
             
             return redirect (url_for ('main.index'))
         
@@ -43,6 +66,84 @@ def index ():
             
             return redirect (url_for ('main.edit', content_name = title))
 
+#! This path will perform searches.
+@main.route ('/search', methods = ["GET", "POST"])
+def search ():
+    if 'loged' in session:
+        if request.method == "POST":
+            user_search = request.form.get ("name").replace (' ', '+')
+            
+            srch_list.append(user_search)
+            
+            return redirect (url_for('main.search_results', name = user_search))
+                 
+        return render_template ("search.html", session = True, table = False)
+    
+    else:
+        return redirect (url_for ('main.index'))
+
+
+#! This path will add search results to DB
+@main.route ('/search/results', methods = ["GET", "POST"])
+def search_results():
+    d = {}
+    
+    if 'loged' in session:
+        if request.method == "GET" and srch_list:
+            dlist.clear()
+            
+            URL = 'https://www.omdbapi.com/?s=' + srch_list [0] + '&apikey=678cd26e'
+            
+            srch_list.clear()
+                
+            q = requests.get(url=URL)
+            r = q.json()
+                
+            if q.status_code == 200:
+                if r['Response'] == 'True':
+                    for i in r['Search']:
+                        d = {
+                            'Title' : i.get ('Title'),
+                            'Year' : i.get ('Year'),
+                            'Type': i.get ('Type').capitalize(),
+                        }
+                                
+                        dlist.append (d)
+
+                    res_list = sorted (dlist, key=itemgetter ('Title'), reverse=False)
+                    
+                    return render_template ("search.html", session = True, table=True, list = res_list)                
+        elif request.method == "POST":
+            add_list = request.form.getlist ('active-item')
+            
+            for i in add_list:
+                if Content.query.filter_by(name=i).count() < 1:
+                    
+                    URL = 'https://www.omdbapi.com/?t=' + i + '&apikey=678cd26e'
+            
+                    q = requests.get(url=URL)
+                    r = q.json()
+                    
+                    if q.status_code == 200:
+                        if r['Response'] == 'True':
+                            d = {
+                                'Title': r['Title'],
+                                'Year' : r['Year'],
+                                'Genre': r['Genre'],
+                                'Rating' : float (r['imdbRating']),
+                                'Type': r['Type'].capitalize()
+                            }
+                
+                    new_content = Content (name=d['Title'], year=d['Year'], genre=d['Genre'], rating = d['Rating'], content_type= d['Type'])
+                    
+                    db.session.add (new_content)
+                    db.session.commit ()
+            
+            add_list.clear ()
+    
+    return redirect (url_for("main.index"))               
+
+'''
 @main.route ('/search', methods = ["GET", "POST"])
 def search ():
     if 'loged' in session:
@@ -112,6 +213,7 @@ def search_results(name):
                 db.session.commit ()
             
     return redirect (url_for("main.index"))
+'''
 
 @main.route ('/edit/<content_name>', methods = ["GET", "POST"])
 def edit (content_name):
