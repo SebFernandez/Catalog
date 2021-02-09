@@ -3,37 +3,76 @@
 {% block title %}Home{% endblock %}
 
 {% block main_content %}
+{% if edit == False %}
+<form type="{{ url_for('main.index') }}" method="POST">
+  <div class="row head">
+    <div class="col-4">Movie</div>
+    <div class="col-3">Genre</div>
+    <div class="col-1">Year</div>
+    <div class="col-1 d-inline-flex justify-content-center">Rating</div>
+    <div class="col-1 d-inline-flex justify-content-center">Your Rating</div>
+    <div class="col-1">Type</div>
+    <div class="col-1 d-inline-flex justify-content-center">
+      <button name="delete" value="delete" type="button submit" class="btn">
+        <i class="fas fa-minus text-danger"></i>
+      </button>
+      <button name="edit" value="edit" type="button submit" class="btn">
+        <i class="fas fa-pen text-secondary"></i>
+      </button>
+    </div>
+  </div>
+  {% for value in information %}
+  <div class="row body">
+    <div class="col-4">{{ value.name }}</div>
+    <div class="col-3">{{ value.genre }}</div>
+    <div class="col-1">{{ value.year }}</div>
+    <div class="col-1 d-inline-flex justify-content-center">{{ value.rating }}</div>
+    <div class="col-1 d-inline-flex justify-content-center">{{ value.user_rating }}</div>
+    <div class="col-1">{{ value.content_type }}</div>
+    <div class="col-1 d-inline-flex justify-content-center">
+      <input type="checkbox" name="active-item" value="{{ value.name }}">
+    </div>
+  </div>
+  {% endfor %}
+{% elif edit == True %}
+<form type="{{ url_for('main.edit') }}" method="POST">
+  <div class="row head">
+    <div class="col-4">Movie</div>
+    <div class="col-3">Genre</div>
+    <div class="col-1">Year</div>
+    <div class="col-1 d-inline-flex justify-content-center">Rating</div>
+    <div class="col-1 d-inline-flex justify-content-center">Your Rating</div>
+    <div class="col-1">Type</div>
+    <div class="col-1 d-inline-flex justify-content-center">
+      <button type="button submit" name="confirm" class="btn">
+        <i class="fas fa-check text-success"></i>
+      </button>
+    </div>
+  </div>
+  {% for value in content %}
+  <div class="row body">
+    <div class="col-4">
+      <input type="text" class="form-control" placeholder="{{ value.get ('Title') }}" disabled/>
+    </div>
+    <div class="col-3">
+      <input type="text" class="form-control" placeholder="{{ value.get ('Genre') }}" disabled/>
+    </div>
+    <div class="col-1">
+      <input type="text" class="form-control" placeholder="{{ value.get ('Year') }}" disabled/>
+    </div>
+    <div class="col-1 d-inline-flex justify-content-center">
+      <input type="text" class="form-control" placeholder="{{ value.get ('Rating') }}" disabled/>
+    </div>
+    <div class="col-1 d-inline-flex justify-content-center">
+      <input type="number" name="your-rating" class="form-control your-rating" min="1" max="10">
+    </div>
+    <div class="col-1">
+      <input type="text" class="form-control" placeholder="{{ value.get ('Type') }}" disabled/>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  {% endfor %}
+</form>
 
-<div class="container-md flex-grow-1 main">
-  <form type="{{ url_for('main.index') }}" method="POST">
-    <div class="row head">
-      <div class="col-4">Movie</div>
-      <div class="col-3">Genre</div>
-      <div class="col-1">Year</div>
-      <div class="col-1 d-inline-flex justify-content-center">Rating</div>
-      <div class="col-1 d-inline-flex justify-content-center">Your Rating</div>
-      <div class="col-1">Type</div>
-      <div class="col-1 d-inline-flex justify-content-center">
-        <button name="delete" value="delete" type="button submit" class="btn">
-          <i class="fas fa-minus text-danger"></i>
-        </button>
-        <button name="edit" value="edit" type="button submit" class="btn">
-          <i class="fas fa-pen text-secondary"></i>
-        </button>
-      </div>
-    </div>
-    {% for value in information %}
-    <div class="row body">
-      <div class="col-4">{{ value.name }}</div>
-      <div class="col-3">{{ value.genre }}</div>
-      <div class="col-1">{{ value.year }}</div>
-      <div class="col-1 d-inline-flex justify-content-center">{{ value.rating }}</div>
-      <div class="col-1 d-inline-flex justify-content-center">{{ value.user_rating }}</div>
-      <div class="col-1">{{ value.content_type }}</div>
-      <div class="col-1 d-inline-flex justify-content-center">
-        <input type="checkbox" name="active-item" value="{{ value.name }}">
-      </div>
-    </div>
-    {% endfor %}
-</div>
+ {% endif %}
 {% endblock %}

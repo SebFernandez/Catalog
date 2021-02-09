@@ -24,8 +24,10 @@
             </nav>
         </header>
 
-        <main class="d-inline-flex">
-            {% block main_content %}{% endblock %}
+        <main>
+            <div class="container-md flex-grow-1">
+                {% block main_content %}{% endblock %}
+            </div>
         </main>
 
         <footer>
