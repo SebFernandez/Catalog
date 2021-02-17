@@ -1,0 +1,26 @@
+{% extends "general.html" %}
+
+{% block title %}Log in{% endblock %}
+
+{% block main_content %}
+
+<form action="{{ url_for ('auth.login') }}" method="POST" class="center-container">
+    <label class="sign-label">Email</label>
+    <input class="form-control" type="email" name="email"/>
+    <label class="sign-label">Password</label>
+    <input class="form-control" type="password" name="password"/>
+    <button type="submit" class="btn btn-primary" id="login-btn">Sign in</button>
+</form>
+
+<hr>
+
+<div class="container d-flex justify-content-center">
+    <div class="row flex-column">
+        <span>Don't you have an account?</span>
+        <div>
+            <a class="btn btn-outline-warning" href="/auth/sign-in" role="button" id="join-btn">Join us!</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

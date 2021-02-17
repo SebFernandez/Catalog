@@ -1,0 +1,17 @@
+{% extends "general.html" %}
+
+{% block title %}Sign in{% endblock %}
+
+{% block main_content %}
+
+<form action="{{ url_for ('auth.sign_in') }}" method="POST" class="center-container">
+    <label class="sign-label">Username</label>
+    <input class="form-control" type="text" name="username" autofocus/>
+    <label class="sign-label">Email</label>
+    <input class="form-control" type="email" name="email"/>
+    <label class="sign-label">Password</label>
+    <input class="form-control" type="password" name="password"/>
+    <button type="submit" class="btn btn-primary" id="sign-btn">I want to join!</button>
+</form>
+
+    {% endblock %}

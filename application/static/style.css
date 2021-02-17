@@ -29,6 +29,8 @@ main    {
     border-top: 1px solid #61A0AF;
     margin-left: 0;
     margin-right: 0;
+    padding-top: 0.5vh;
+    padding-bottom: 0.5vh;
 }
 
 #chck   {
@@ -72,6 +74,30 @@ main    {
     width: 8vh;
 }
 
-.fab.fa-github   {
+.fab.fa-github  {
     color: aliceblue;
+}
+
+hr  {
+    background-color: #B6C649;
+    margin-top: 7.7vh;
+}
+
+#sign-btn, #login-btn   {
+    margin-left: 43.5%;
+    margin-top: 1.7vh;
+}
+
+#join-btn   {
+    margin-left: 4.2vh;
+    margin-top: 1.7vh;
+}
+
+.center-container   {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.sign-label {
+    margin-top: 1vh;
 }
