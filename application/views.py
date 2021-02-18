@@ -1,8 +1,7 @@
-from flask import Blueprint, url_for, render_template, request, redirect, session
+from flask import Blueprint, url_for, render_template, request, redirect
 from flask_login import login_required, current_user
 from application.models import Content
-from operator import add, itemgetter
-
+from operator import itemgetter
 from . import db
 import requests
 
@@ -11,7 +10,7 @@ main = Blueprint('main', __name__)
 '''
 
 # TODO
-    - Add users.
+    - Flash messages.
     - Unit test.
     - Clean Code.
 
@@ -25,7 +24,6 @@ definitive_edit_list = []
 user_search = ""
 dlist = []
 
-
 def delete_items():
     if delete_list:
         for i in delete_list:
@@ -38,12 +36,6 @@ def delete_items():
                 db.session.commit()
 
         delete_list.clear()
-
-
-def delete_full_db():
-    Content.query.delete()
-    db.session.commit()
-
 
 @main.route('/', methods=["GET", "POST"])
 def index():

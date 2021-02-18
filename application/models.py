@@ -44,7 +44,7 @@ class User (db.Model, UserMixin):
     password = db.Column (db.String (20), nullable = False)
     catalog = db.relationship ('Content')
     
-    def __init__ (self, email, password, username):
+    def __init__ (self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
