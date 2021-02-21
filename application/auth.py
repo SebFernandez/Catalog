@@ -30,6 +30,9 @@ def login ():
 @auth.route ('/logout')
 @login_required
 def logout ():
+    #! Pytest has an issue with current_user.
+    #! In case of running tests, please edit the 2nd print of this function, then execute the tests.
+    
     print ()
     print (f" * {current_user.username} has loged out.")
     print ()

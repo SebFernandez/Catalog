@@ -26,16 +26,15 @@ def test_home_page_post (test_client):
     assert response.status_code == 200
 
 #!Problem with @login_required
-'''
+
 def test_search_get (test_client):
     
-    ''''''
+    '''
     GIVEN a Flask application configrured for testing
     WHEN the '/search' page is requested (GET)
     THEN check that a '200' status code is returned
-    ''''''
+    '''
     
     response = test_client.get ('/search')
     
     assert response.status_code == 200
-'''
