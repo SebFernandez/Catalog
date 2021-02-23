@@ -3,7 +3,7 @@
 {% block title %}Search{% endblock %}
 
 {% block main_content %}
-<form action="{{ url_for ('main.search') }}" method="POST">
+<form action="{{ url_for ('views.search') }}" method="POST">
     <label>Content name</label>
     <div class="input-group mb-3">
         <input class="form-control" type="text" name="name" placeholder="Star Wars" autofocus>
@@ -12,7 +12,7 @@
 </form>
 
 {% if table == True %}
-<form action="{{ url_for ('main.search_results') }}" method="POST">
+<form action="{{ url_for ('views.search_results') }}" method="POST">
     <div class="row head">
         <div class="col-6">Movie</div>
         <div class="col-3 d-inline-flex">Year</div>

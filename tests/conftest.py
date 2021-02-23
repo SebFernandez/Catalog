@@ -1,3 +1,4 @@
+from sqlalchemy.orm import load_only
 from application.auth import login
 import pytest
 from application import create_app, db
@@ -13,7 +14,7 @@ def new_user ():
 
 @pytest.fixture (scope = 'module')
 def new_content():
-    content = Content ("Attack on Titan", "2013", "Anime", "10", "Series", "1")
+    content = Content ("Attack on Titan", "2013", "Anime", "10", "Series", 1)
     return content
 
 @pytest.fixture (scope = 'module')
@@ -30,7 +31,7 @@ def test_client (new_user):
             yield testing_client  # this is where the testing happens!
 
 @pytest.fixture(scope='module')
-def init_database(test_client):
+def db_session(test_client):
     # Create the database and the database table
     db.create_all()
 
@@ -40,7 +41,14 @@ def init_database(test_client):
     db.session.add(user1)
     db.session.add(user2)
     
-    content1 = Content ('contentTest', '2021', 'Action', '10', 'Movie', '1')
+    #Insert content data
+    users_id = db.session.query(User).options(load_only('id'))
+    for i in users_id:
+        content1 = Content ('contentTest1', '2021', 'Action', '10', 'Movie', i.id)
+        content2 = Content ('contentTest2', '2012', 'Action', '10', 'Movie', i.id)
+
+    db.session.add(content1)
+    db.session.add(content2)
 
     # Commit the changes for the users
     db.session.commit()

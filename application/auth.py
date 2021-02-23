@@ -1,4 +1,4 @@
-from flask import Blueprint, session, redirect, url_for, request
+from flask import Blueprint, session, redirect, url_for, request, current_app
 from flask.templating import render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
@@ -22,24 +22,24 @@ def login ():
             print (f" * {user.username} has loged in.")
             print ()
             
-            return redirect (url_for ('main.index'))
+            return redirect (url_for ('views.index'))
         
     return render_template ("login.html", user=current_user)
         
-
 @auth.route ('/logout')
 @login_required
 def logout ():
+
     #! Pytest has an issue with current_user.
-    #! In case of running tests, please edit the 2nd print of this function, then execute the tests.
-    
-    print ()
-    print (f" * {current_user.username} has loged out.")
-    print ()
+    #! So I've preferred to log what happens when config is not set to TRUE.    
+    if current_app.config['TESTING'] == False:
+        print ()
+        print (f" * {current_user.username} has loged out.")
+        print ()
     
     logout_user ()
     
-    return redirect (url_for ('main.index'))
+    return redirect (url_for ('views.index'))
 
 @auth.route ('/sign-in',  methods = ["GET", "POST"])
 def sign_in ():
@@ -66,6 +66,6 @@ def sign_in ():
                 print (f" * Password:   {new_user.password}")
                 print ()
             
-                return redirect (url_for ('main.index'))
+                return redirect (url_for ('views.index'))
     
     return render_template ("sign_in.html", user=current_user)

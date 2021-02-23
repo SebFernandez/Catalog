@@ -5,7 +5,7 @@ from operator import itemgetter
 from . import db
 import requests
 
-main = Blueprint('main', __name__)
+views = Blueprint('views', __name__)
 
 '''
 
@@ -37,7 +37,7 @@ def delete_items():
 
         delete_list.clear()
 
-@main.route('/', methods=["GET", "POST"])
+@views.route('/', methods=["GET", "POST"])
 def index():
     edit_list.clear()
     definitive_edit_list.clear()
@@ -51,7 +51,7 @@ def index():
                 delete_list.append(i)
                 
             delete_items ()
-            return redirect (url_for ('main.index'))
+            return redirect (url_for ('views.index'))
         
         elif request.form.get ("edit") == 'edit':
             
@@ -59,24 +59,24 @@ def index():
                 
                 edit_list.append(i)
             
-            return redirect (url_for ('main.edit'))
+            return redirect (url_for ('views.edit'))
 
     return render_template("index.html", user=current_user, edit=False)
 
 #! This path will perform searches.
-@main.route('/search', methods=["GET", "POST"])
+@views.route('/search', methods=["GET", "POST"])
 @login_required
 def search():
     if request.method == "POST":
         user_search = request.form.get("name").replace(' ', '+')
         srch_list.append(user_search)
 
-        return redirect(url_for('main.search_results', name=user_search))
+        return redirect(url_for('views.search_results', name=user_search))
     
     return render_template ("search.html", user=current_user)
 
 #! This path will add search results to DB
-@main.route ('/search/results', methods = ["GET", "POST"])
+@views.route ('/search/results', methods = ["GET", "POST"])
 @login_required
 def search_results():
     d = {}
@@ -133,9 +133,9 @@ def search_results():
             
         add_list.clear ()
     
-    return redirect (url_for("main.index"))               
+    return redirect (url_for("views.index"))               
 
-@main.route ('/edit', methods = ["GET", "POST"])
+@views.route ('/edit', methods = ["GET", "POST"])
 @login_required
 def edit ():
     edit_dict = {}
@@ -170,4 +170,4 @@ def edit ():
                         title.user_rating = u
                         db.session.commit ()
 
-    return redirect (url_for ('main.index'))
+    return redirect (url_for ('views.index'))

@@ -4,7 +4,7 @@
 
 {% block main_content %}
 {% if edit == False %}
-<form type="{{ url_for('main.index') }}" method="POST">
+<form type="{{ url_for('views.index') }}" method="POST">
   <div class="row head">
     <div class="col-4">Movie</div>
     <div class="col-3">Genre</div>
@@ -35,7 +35,7 @@
   </div>
   {% endfor %}
 {% elif edit == True %}
-<form type="{{ url_for('main.edit') }}" method="POST">
+<form type="{{ url_for('views.edit') }}" method="POST">
   <div class="row head">
     <div class="col-4">Movie</div>
     <div class="col-3">Genre</div>

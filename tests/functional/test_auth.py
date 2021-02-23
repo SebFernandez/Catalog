@@ -1,8 +1,8 @@
 '''
 This file will test GETs and POSTs on the blueprint with name AUTH
 '''
-
-def test_login_page_get (test_client):
+    
+def test_login_logout_page (test_client, db_session):
     '''
     GIVEN a Flask application configured for testing
     WHEN the '/login' page is requested (GET)
@@ -11,8 +11,7 @@ def test_login_page_get (test_client):
     
     response = test_client.get ('/auth/login')
     assert response.status_code == 200
-    
-def test_login_logout_page_post (test_client, init_database):
+
     '''
     GIVEN a Flask application configured for testing
     WHEN the '/login' page is posted (POST) with a valid user
@@ -33,7 +32,7 @@ def test_login_logout_page_post (test_client, init_database):
     assert response.status_code == 200
 
     
-def test_sign_in_page_get (test_client):
+def test_sign_in_page (test_client, db_session):
     '''
     GIVEN a Flask application configured for testing
     WHEN the '/sign-in' page is requested (GET)
@@ -43,7 +42,6 @@ def test_sign_in_page_get (test_client):
     response = test_client.get ('/auth/sign-in')
     assert response.status_code == 200
     
-def test_sign_in_page_post (test_client, init_database):
     '''
     GIVEN a Flask application configured for testing
     WHEN the '/sign-in' page is posted (POST)
