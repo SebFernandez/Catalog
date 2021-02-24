@@ -21,6 +21,8 @@ def test_home_page (test_client):
     '''
     response = test_client.post ('/')
     assert response.status_code == 200
+    
+    assert response.status_code == 200
 
 @pytest.mark.parametrize ('user_search', ["star wars", "friends"])
 def test_search (test_client, user_search):
@@ -42,4 +44,5 @@ def test_search (test_client, user_search):
     response = test_client.post ('/search',
                                data=dict(name=user_search),
                                follow_redirects=True)
+    
     assert response.status_code == 200

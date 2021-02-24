@@ -27,7 +27,11 @@
     <div class="col-3">{{ value.genre }}</div>
     <div class="col-1">{{ value.year }}</div>
     <div class="col-1 d-inline-flex justify-content-center">{{ value.rating }}</div>
-    <div class="col-1 d-inline-flex justify-content-center">{{ value.user_rating }}</div>
+    {% if value.user_rating == 0 %}
+      <div class="col-1 d-inline-flex justify-content-center">-</div>
+    {% else %}
+      <div class="col-1 d-inline-flex justify-content-center">{{ value.user_rating }}</div>
+    {% endif %}
     <div class="col-1">{{ value.content_type }}</div>
     <div class="col-1 d-inline-flex justify-content-center">
       <input type="checkbox" name="active-item" value="{{ value.name }}">
