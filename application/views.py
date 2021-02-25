@@ -7,14 +7,8 @@ import requests
 
 views = Blueprint('views', __name__)
 
-'''
-
-# TODO
-    - Flash messages.
-    - Unit test.
-    - Clean Code.
-
-'''
+#! TODO
+#*   - Clean Code.
 
 add_list = []
 srch_list = []

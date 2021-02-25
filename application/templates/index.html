@@ -3,6 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block main_content %}
+{% if user.is_authenticated == True %}
+
 {% if edit == False %}
 <form type="{{ url_for('views.index') }}" method="POST">
   <div class="row head">
@@ -79,4 +81,27 @@
 </form>
 
  {% endif %}
+{% else %}
+<div class="container">
+  <div class="row home justify-content-center">
+    <h1>Welcome to Catalog!</h1>
+  </div>
+  <hr id="home">
+  <div class="row home">
+    <h5>Store information related to films, television programs and video games. Have you liked Star Wars: A New Hope? Added to your account and rate it!</h5>
+  </div>
+  <div class="row home">
+    <h5>All in one! Everything you have watched and played can be organized at the same place.</h5>
+  </div>
+  <div class="container" id="tech">
+    <div class="row home justify-content-center">
+      <h1>Ingredients</h1>
+    </div>
+    <hr id="home">
+    <div class="row home justify-content-center">
+      <h5>Python, SQLITE and Bootstrap.</h5>
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

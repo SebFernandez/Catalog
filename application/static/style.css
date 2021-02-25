@@ -9,6 +9,10 @@ main    {
     margin-right: 5vh;
 }
 
+#home   {
+    background-color: #F6AE2D;
+}
+
 .nav.fixed-bottom.footer {
     margin-top: 15%;
     border-top: 1px solid #D74E09;
@@ -17,6 +21,15 @@ main    {
 .nav.header    {
     border-bottom: 1px solid #B95F89;
     width: 100%;
+}
+
+.row.home   {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#tech   {
+    margin-top: 20vh;
 }
 
 .row.head{
@@ -78,7 +91,7 @@ main    {
     color: aliceblue;
 }
 
-hr  {
+#login  {
     background-color: #B6C649;
     margin-top: 7.7vh;
 }
