@@ -1,4 +1,5 @@
 from flask_login import UserMixin
+from sqlalchemy.orm import backref
 from . import db
 
 '''
@@ -42,7 +43,7 @@ class User (db.Model, UserMixin):
     username = db.Column (db.String (50), unique = True, nullable = False)
     email = db.Column (db.String (20), unique = True, nullable = False)
     password = db.Column (db.String (20), nullable = False)
-    catalog = db.relationship ('Content')
+    catalog = db.relationship ('Content', order_by = 'Content.name')
     
     def __init__ (self, username, email, password):
         self.username = username

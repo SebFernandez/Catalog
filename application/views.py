@@ -7,16 +7,10 @@ import requests
 
 views = Blueprint('views', __name__)
 
-#! TODO
-#*   - Clean Code.
-
-add_list = []
 srch_list = []
 delete_list = []
 edit_list = []
-definitive_edit_list = []
 user_search = ""
-dlist = []
 
 def delete_items():
     if delete_list:
@@ -34,7 +28,6 @@ def delete_items():
 @views.route('/', methods=["GET", "POST"])
 def index():
     edit_list.clear()
-    definitive_edit_list.clear()
     
     if request.method == "POST":
         titles = request.form.getlist ("active-item")
@@ -54,7 +47,7 @@ def index():
                 edit_list.append(i)
             
             return redirect (url_for ('views.edit'))
-
+        
     return render_template("index.html", user=current_user, edit=False)
 
 #! This path will perform searches.
@@ -74,9 +67,9 @@ def search():
 @login_required
 def search_results():
     d = {}
+    dList = []
     
     if request.method == "GET" and srch_list:
-        dlist.clear()
             
         URL = 'https://www.omdbapi.com/?s=' + srch_list [0] + '&apikey=678cd26e'
             
@@ -94,9 +87,9 @@ def search_results():
                         'Type': i.get ('Type').capitalize(),
                     }
                                 
-                    dlist.append (d)
+                    dList.append (d)
 
-                res_list = sorted (dlist, key=itemgetter ('Title'), reverse=False)
+                res_list = sorted (dList, key=itemgetter ('Title'), reverse=False)
                     
                 return render_template ("search.html", user=current_user, table=True, list = res_list)                
     elif request.method == "POST":
@@ -133,6 +126,7 @@ def search_results():
 @login_required
 def edit ():
     edit_dict = {}
+    definitive_edit_list = []
     
     if request.method == "GET":
         if edit_list:                
@@ -155,13 +149,12 @@ def edit ():
     elif request.method == "POST":
         if request.form.getlist ('your-rating'):
             user_rating = request.form.getlist ('your-rating')
-                
-            for u in user_rating:
-                for i in edit_list:
-                    title = Content.query.filter_by(name=i).first()
+            
+            for i in range (0, len(edit_list)):
+                title = Content.query.filter_by(name=edit_list[i]).first()
                     
-                    if u:
-                        title.user_rating = u
-                        db.session.commit ()
+                if user_rating [i]:
+                    title.user_rating = user_rating [i]
+                    db.session.commit ()
 
     return redirect (url_for ('views.index'))
